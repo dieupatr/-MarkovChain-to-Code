@@ -1,8 +1,29 @@
 from LexDrawio import *
 
+import os
+
+import pickle
+
+import sys
 
 
+def create_folder(folder_name):
+    try:
+        os.makedirs(folder_name)
+        
+    except :
+        pass
 
+def pickle_data(data, filename):
+    """
+    Pickle a dictionary to a file.
+
+    Parameters:
+        dictionary (dict): The dictionary to pickle.
+        filename (str): The name of the file to pickle to.
+    """
+    with open(filename, 'wb') as file:
+        pickle.dump(data, file)
 
 
 def BuildMatrix(States,Probabilitys):
@@ -104,14 +125,24 @@ def ValidProbabilityMatrix(Matrix  , DescribeState):
 
 def GenerateCode(Matrix , DescribeState,TabName):
 
+       
+
 
 
        State=[ DescribeState[key]  for key in DescribeState]
        return f"""
 
-def MarkovChain_{TabName}(mu):
+def LoadModell_MarkovChain_{TabName}():
        
-       Matrix={Matrix}
+
+       with open('Model_MarkovChain_{TabName}'+'/PMatrix_{TabName}.pkl', 'rb') as file:   Matrix = pickle.load(file)
+
+       return Matrix
+
+
+
+def MarkovChain_{TabName}(mu, Matrix):
+
        N=len(mu)
 
        mu_new=[0 for i in range(N) ]
@@ -132,6 +163,8 @@ def PrintState(mu,States):
 
 
 def CallMarkovChain_{TabName}(mu):
+
+       
        States={State}
 
        N=len(States)
@@ -156,15 +189,26 @@ def BuildMarkovChainModell(file_path, TabName):
 
        [Matrix , DescribeState]=ParseMarkovChainFromDiagram(Diagram)
 
+   
+       
+       
+
        if ValidProbabilityMatrix(Matrix, DescribeState) :
+              
+                  RootFolder="Modell_MarkovChain_"+TabName
 
-              File=open(TabName+"_MarkovChain.py",'w')
+                  create_folder(RootFolder)
 
-              File.write(
+                  pickle_data(Matrix, RootFolder+"/"+"PMatrix_"+TabName+".pkl")
+
+                  File=open(RootFolder+"/"+TabName+"_MarkovChain.py",'w')
+
+                  File.write(
                      GenerateCode(Matrix , DescribeState,TabName)
 
                      )
-              File.close()
+
+                  File.close()
               
 
        
@@ -180,8 +224,11 @@ def BuildMarkovChainModell(file_path, TabName):
 ###############################
        
 
-file_path="MarkovStateDia.drawio"
-TabName="Test1"
+file_path=sys.argv[1]
+
+#"MarkovStateDia.drawio"
+TabName=sys.argv[2]
+#"Test1"
 
 BuildMarkovChainModell(file_path, TabName)
 

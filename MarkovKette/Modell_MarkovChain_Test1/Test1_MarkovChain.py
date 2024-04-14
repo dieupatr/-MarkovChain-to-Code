@@ -1,8 +1,16 @@
 
 
-def MarkovChain_Test1(mu):
+def LoadModell_MarkovChain_Test1():
        
-       Matrix=[[0.3, 0.7], [0.4, 0.6]]
+
+       with open('Model_MarkovChain_Test1'+'/PMatrix_Test1.pkl', 'rb') as file:   Matrix = pickle.load(file)
+
+       return Matrix
+
+
+
+def MarkovChain_Test1(mu, Matrix):
+
        N=len(mu)
 
        mu_new=[0 for i in range(N) ]
@@ -23,6 +31,7 @@ def PrintState(mu,States):
 
 
 def CallMarkovChain_Test1(mu):
+
        
        States=['E', 'A']
 
@@ -32,18 +41,8 @@ def CallMarkovChain_Test1(mu):
 
        mu=MarkovChain_Test1(mu)
 
-       PrintState(mu,States)
+       #PrintState(mu,States)
 
        return [States, mu]
-
-
-#######################
-
-
-CallMarkovChain_Test1([1,0])
-
-
-
-
 
        
