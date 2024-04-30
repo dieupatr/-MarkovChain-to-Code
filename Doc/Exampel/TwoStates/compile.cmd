@@ -1,0 +1,1 @@
+python C:\WorkspaceGit\-MarkovChain-to-Code\MarkovToCode.py MarkovStateDia.drawio Test1

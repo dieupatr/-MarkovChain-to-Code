@@ -131,13 +131,23 @@ def GenerateCode(Matrix , DescribeState,TabName):
 
        State=[ DescribeState[key]  for key in DescribeState]
        return f"""
+import pickle
 
 def LoadModell_MarkovChain_{TabName}():
        
 
-       with open('Model_MarkovChain_{TabName}'+'/PMatrix_{TabName}.pkl', 'rb') as file:   Matrix = pickle.load(file)
+       with open('Modell_MarkovChain_{TabName}'+'/PMatrix_{TabName}.pkl', 'rb') as file:   Matrix = pickle.load(file)
 
        return Matrix
+
+def LoadModell_MarkovChain(filename):
+       
+
+       with open(filename, 'rb') as file:   Matrix = pickle.load(file)
+
+       return Matrix
+
+
 
 
 
@@ -162,7 +172,7 @@ def PrintState(mu,States):
        print( "The probably state is "+state+ " with p= "+str(p))
 
 
-def CallMarkovChain_{TabName}(mu):
+def CallMarkovChain_{TabName}(mu, Matrix):
 
        
        States={State}
@@ -171,7 +181,7 @@ def CallMarkovChain_{TabName}(mu):
        mu_0=[0 for k in range(N) ]
        mu_0=mu
 
-       mu=MarkovChain_{TabName}(mu)
+       mu=MarkovChain_{TabName}(mu_0, Matrix)
 
        #PrintState(mu,States)
 
@@ -201,7 +211,7 @@ def BuildMarkovChainModell(file_path, TabName):
 
                   pickle_data(Matrix, RootFolder+"/"+"PMatrix_"+TabName+".pkl")
 
-                  File=open(RootFolder+"/"+TabName+"_MarkovChain.py",'w')
+                  File=open(TabName+"_MarkovChain.py",'w')
 
                   File.write(
                      GenerateCode(Matrix , DescribeState,TabName)

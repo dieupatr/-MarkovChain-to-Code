@@ -1,11 +1,21 @@
 
+import pickle
 
 def LoadModell_MarkovChain_Test1():
        
 
-       with open('Model_MarkovChain_Test1'+'/PMatrix_Test1.pkl', 'rb') as file:   Matrix = pickle.load(file)
+       with open('Modell_MarkovChain_Test1'+'/PMatrix_Test1.pkl', 'rb') as file:   Matrix = pickle.load(file)
 
        return Matrix
+
+def LoadModell_MarkovChain(filename):
+       
+
+       with open(filename, 'rb') as file:   Matrix = pickle.load(file)
+
+       return Matrix
+
+
 
 
 
@@ -30,7 +40,7 @@ def PrintState(mu,States):
        print( "The probably state is "+state+ " with p= "+str(p))
 
 
-def CallMarkovChain_Test1(mu):
+def CallMarkovChain_Test1(mu, Matrix):
 
        
        States=['E', 'A']
@@ -39,7 +49,7 @@ def CallMarkovChain_Test1(mu):
        mu_0=[0 for k in range(N) ]
        mu_0=mu
 
-       mu=MarkovChain_Test1(mu)
+       mu=MarkovChain_Test1(mu_0, Matrix)
 
        #PrintState(mu,States)
 
